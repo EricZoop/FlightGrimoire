@@ -2,7 +2,7 @@
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "flightgrimoire",
   "version": "0.1.0",
-  "identifier": "com.tauri.dev",
+  "identifier": "com.flightgrimoire.app",
   "build": {
     "frontendDist": "../dist",
     "beforeDevCommand": "npm run dev",
@@ -12,8 +12,9 @@
     "windows": [
       {
         "title": "FlightGrimoire",
-        "width": 800,
-        "height": 600,
+        
+        "width": 1000,
+        "height": 750,
         "resizable": true,
         "fullscreen": false
       }
