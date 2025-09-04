@@ -1,121 +1,285 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* ==============================================
+  CSS Variables (Custom Properties)
+  ==============================================
+  Define colors and fonts in one place for easy theme changes.
+*/
+:root {
+  --font-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-secondary: 'Roboto', sans-serif;
+  --font-monospace: monospace;
+
+  --bg-dark-primary: #181818;
+  --bg-dark-secondary: #1a1a1a;
+  --bg-dark-tertiary: #282828;
+
+  --text-primary: #e0e0e0;
+  --text-secondary: #999;
+  --text-emphasis: #f7f7f7;
+  --text-accent: #81C784;
+
+  --border-color: #333;
+  --hover-color: #5a5a5ac7;
+  --button-bg: #404040;
+}
+
+/* ==============================================
+  Global & Body Styles
+  ==============================================
+*/
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #1e1e1e;
-  color: #e0e0e0;
+  font-family: var(--font-primary);
+  background: var(--bg-dark-tertiary);
+  color: var(--text-primary);
   display: flex;
   height: 100vh;
+  overflow: hidden; /* Prevents body scrollbar */
 }
 
 main {
   display: flex;
   flex: 1;
+  width: 100%;
 }
 
-/* Left upload panel */
+/* ==============================================
+  Left Panel: Upload
+  ==============================================
+*/
 .upload {
-  flex: 1;
+  flex: 0 0 25%; /* Slightly wider for better spacing */
+  min-width: 300px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  border-right: 1px solid var(--border-color);
+  background: var(--bg-dark-primary);
+  overflow-y: auto;
+}
+
+.header {
+  display: flex;
   align-items: center;
-  border-right: 1px solid #444;
-  cursor: pointer;
-  transition: background 0.2s ease;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
 }
 
-.upload.dragover {
-  background: #333;
+.logo {
+  width: 36px;
+  height: 36px;
 }
 
-.upload label {
-  border: 2px dashed #666;
-  padding: 2rem;
-  border-radius: 8px;
-  text-align: center;
-  font-size: 1.1rem;
-  color: #aaa;
+.logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
-.upload input[type="file"] {
+.title {
+  font-family: var(--font-secondary);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-emphasis);
+  margin: 0;
+}
+
+/* ==============================================
+  NEW: Upload Form & Radio Button Styles
+  ==============================================
+*/
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  gap: 1.5rem;
+}
+
+.upload-options {
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Hide the actual radio button */
+.upload-options input[type="radio"] {
   display: none;
 }
 
-/* Right panel */
-.right-panel {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
+.radio-label {
+  display: block;
+  background: var(--bg-dark-tertiary);
 
-.panel-header {
-  padding: 0.75rem 1rem;
-  background: #2a2a2a;
-  border-bottom: 1px solid #444;
-}
-
-.panel-header label {
-  font-size: 0.9rem;
-  margin-right: 0.5rem;
-  color: #ccc;
-}
-
-.panel-header input[type="text"] {
-  width: 80%;
-  padding: 0.4rem;
-  background: #1e1e1e;
-  border: 1px solid #555;
   border-radius: 4px;
-  color: #e0e0e0;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-align: center;
+  font-size: 1rem;
 }
 
-.preview {
-  flex: 1;
-  padding: 2rem;
+.radio-label:hover {
+  border-color: var(--text-secondary);
+  background: #3a3a3a;
+}
+
+/* Style for the selected radio button's label */
+.upload-options input[type="radio"]:checked + .radio-label {
+  background: var(--button-bg);
+  border-color: var(--text-accent);
+  color: var(--text-emphasis);
+  font-weight: 500;
+}
+
+/* Visually hide the legend but keep for screen readers */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* Primary upload button styling */
+.upload-button {
+  display: block;
+  width: 100%; /* Ensure buttons take full width */
+  background: var(--button-bg);
+  border-radius: 4px;
+  border: none; /* Add this for consistency */
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 0.8rem;
+  color: var(--text-emphasis);
+  transition: background 0.2s ease;
+  cursor: pointer;
+}
+
+.upload-button:hover {
+  background: var(--hover-color);
+}
+
+/* Hide the file input, triggered by its label */
+#file-input {
+  display: none;
+}
+
+
+/* ==============================================
+  Right Panel: History
+  ==============================================
+*/
+.history-panel {
+  flex: 1 1 75%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: #ccc;
-}
-
-.file-info {
-  margin-top: 1rem;
-  text-align: center;
-}
-
-.timestamp {
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  color: #888;
-}
-
-/* History section */
-.history {
-  background: #2a2a2a;
-  border-top: 1px solid #444;
-  padding: 0.75rem 1rem;
-  max-height: 150px;
+  background: var(--bg-dark-secondary);
   overflow-y: auto;
-  font-size: 0.9rem;
 }
 
-.history h3 {
-  margin: 0 0 0.5rem;
-  font-size: 1rem;
-  color: #ddd;
+.history-list {
+  padding: 0;
+  margin: 0;
+  list-style-type: none; /* Good practice for lists used for layout */
 }
 
 .history-item {
-  border-bottom: 1px solid #444;
-  padding: 0.3rem 0;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #2a2a2a;
+  transition: background 0.1s ease;
 }
 
-.history-item:last-child {
-  border-bottom: none;
+.history-item:hover {
+  background: #252525;
 }
 
-.history-item span {
-  display: block;
+.file-name {
+  font-weight: 500;
+  color: var(--text-emphasis);
+  margin: 0 0 0.5rem 0;
+}
+
+.file-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem; /* Adds a small space between detail lines */
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem; /* Ensures space below the details block */
+}
+.download-name {
+  font-family: var(--font-monospace);
   font-size: 0.8rem;
-  color: #888;
+  color: var(--text-accent);
+  margin-top: 0.5rem;
+}
+
+.download-link {
+  font-family: var(--font-monospace);
+  color: var(--text-accent);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.download-link:hover {
+  text-decoration: underline;
+}
+
+.empty-state {
+  padding: 2rem;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+/* ==============================================
+  Custom Scrollbar
+  ==============================================
+*/
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-track {
+  background: #464646;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #6b6b6b;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+/* ==============================================
+  Responsive Design: Mobile & Tablet
+  ==============================================
+*/
+@media (max-width: 800px) {
+  main {
+    flex-direction: column;
+  }
+
+  .upload {
+    flex: 0 0 auto; /* Allow panel to size to its content */
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    min-width: unset;
+  }
+  
+  .history-panel {
+    flex: 1 1 auto; /* Allow panel to fill remaining space */
+  }
 }
