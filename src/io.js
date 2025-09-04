@@ -27,6 +27,27 @@ function downloadCsv(csvContent, filename) {
     URL.revokeObjectURL(url); // Clean up the object URL
 }
 
+// --- New Save Picker Function ---
+async function saveFileWithPicker(csvContent, filename) {
+    try {
+        const opts = {
+            suggestedName: filename,
+            types: [
+                {
+                    description: 'CSV Files',
+                    accept: { 'text/csv': ['.csv'] },
+                },
+            ],
+        };
+        const handle = await window.showSaveFilePicker(opts);
+        const writable = await handle.createWritable();
+        await writable.write(csvContent);
+        await writable.close();
+    } catch (err) {
+        console.error('Save cancelled or failed:', err);
+    }
+}
+
 function showFile(file, result) {
     const now = new Date();
     const timeString = now.toLocaleString();
@@ -50,9 +71,14 @@ function showFile(file, result) {
         `;
         const downloadLink = item.querySelector('.download-link');
         if (downloadLink) {
-            downloadLink.addEventListener('click', (e) => {
+            downloadLink.addEventListener('click', async (e) => {
                 e.preventDefault();
-                downloadCsv(result.csvContent, result.filename);
+                if (window.showSaveFilePicker) {
+                    await saveFileWithPicker(result.csvContent, result.filename);
+                } else {
+                    // fallback for unsupported browsers
+                    downloadCsv(result.csvContent, result.filename);
+                }
             });
         }
     } else {
